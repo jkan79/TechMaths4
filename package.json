@@ -1,0 +1,27 @@
+{
+  "name": "techmaths4",
+  "version": "1.0.0",
+  "description": "Technical Mathematics Level 4 Textbook Progressive Web App",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo Building TechMaths4... && mkdir -p www && cp -r src/* www/ || xcopy src www /E /I /Y",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pwa",
+    "capacitor",
+    "education",
+    "maths"
+  ],
+  "author": "Your Name or Organization",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/core": "^6.2.1",
+    "@capacitor/ios": "^6.2.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.1"
+  }
+}

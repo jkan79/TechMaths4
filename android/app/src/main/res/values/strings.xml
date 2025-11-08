@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TechnicalMathsApp</string>
+    <string name="title_activity_main">TechnicalMathsApp</string>
+    <string name="package_name">com.level4.technicalmathematics</string>
+    <string name="custom_url_scheme">com.level4.technicalmathematics</string>
+</resources>

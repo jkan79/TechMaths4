@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-scale=1.0" />
+    <title>TechMaths4</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #ffffff;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      /* Splash screen */
+      #splash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #33c7ff; /* accent color */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 10;
+        transition: opacity 0.5s ease-out;
+      }
+
+      #splash img {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 20px;
+        border-radius: 20px;
+      }
+
+      /* Offline screen */
+      #offline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f9f9f9;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+        text-align: center;
+        padding: 20px;
+      }
+
+      #offline img {
+        width: 80px;
+        margin-bottom: 20px;
+      }
+
+      #offline button {
+        margin-top: 20px;
+        background-color: #33c7ff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Splash -->
+    <div id="splash">
+      <img src="icon.png" alt="App Icon" />
+      <div>Loading TechMaths4...</div>
+    </div>
+
+    <!-- Offline message -->
+    <div id="offline">
+      <img src="offline.png" alt="Offline" />
+      <h2>You’re Offline</h2>
+      <p>Please check your internet connection and try again.</p>
+      <button onclick="retryConnection()">Retry</button>
+    </div>
+
+    <!-- Main app -->
+    <iframe 
+      id="appFrame"
+      src="https://level4.technicalmathematics.com"
+      allow="fullscreen"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups">
+    </iframe>
+
+    <script>
+      const iframe = document.getElementById("appFrame");
+      const splash = document.getElementById("splash");
+      const offline = document.getElementById("offline");
+
+      function showOffline() {
+        splash.style.display = "none";
+        iframe.style.display = "none";
+        offline.style.display = "flex";
+      }
+
+      function hideOffline() {
+        offline.style.display = "none";
+      }
+
+      function retryConnection() {
+        if (navigator.onLine) {
+          window.location.reload();
+        } else {
+          alert("Still offline. Please reconnect to the internet.");
+        }
+      }
+
+      // Splash fade after iframe load
+      iframe.addEventListener("load", () => {
+        if (navigator.onLine) {
+          splash.style.opacity = 0;
+          setTimeout(() => {
+            splash.style.display = "none";
+            iframe.style.display = "block";
+          }, 500);
+        }
+      });
+
+      // Handle offline/online events
+      window.addEventListener("offline", showOffline);
+      window.addEventListener("online", hideOffline);
+
+      // Initial check
+      if (!navigator.onLine) {
+        showOffline();
+      }
+
+      // Fallback: if website takes long
+      setTimeout(() => {
+        if (navigator.onLine) {
+          splash.style.opacity = 0;
+          iframe.style.display = "block";
+        } else {
+          showOffline();
+        }
+      }, 10000);
+    </script>
+  </body>
+</html>

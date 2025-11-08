@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.level4.technicalmathematics"
+    compileSdkVersion 35
+
+    defaultConfig {
+        applicationId "com.level4.techmaths4"
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        aaptOptions {
+            // Files and dirs to omit from packaged assets dir (modern web apps)
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+
+    // -----------------------
+    // Signing configuration
+    // -----------------------
+    signingConfigs {
+        release {
+            // Keystore file (absolute path)
+            storeFile file("C:/Users/1/Documents/tm-pwa-android/android/tm-pwa-release.keystore")
+
+            // Replace the placeholders below with actual passwords OR
+            // put these values in android/gradle.properties (recommended)
+            storePassword "qwerty54321"
+            keyAlias "tm-pwa-key"
+            keyPassword "qwerty54321"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true         // Shrink code
+            shrinkResources true       // Remove unused resources
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+
+    // Enable APK splits for CPU architectures
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a'
+            universalApk false // Prevent generating a huge universal APK
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    flatDir {
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:1.7.0"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation project(':capacitor-android')
+    implementation project(':capacitor-cordova-android-plugins')
+
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.2.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.6.1"
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.exists() && servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.lifecycle("google-services.json not found, skipping Firebase setup.")
+}
